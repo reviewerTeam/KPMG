@@ -1,0 +1,36 @@
+version: "3.7"
+
+services:
+  api:
+    image: api:v1
+    environment:
+      - CONNECTION_STRING=<connection string>
+    depends_on:
+      - db
+    networks:
+      - backend
+      - frontend
+
+  webapp:
+    image: webapp:v1
+    depends_on:
+      - api
+    ports:
+      - "8001:8001"
+    networks:
+      - frontend
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: 3tierdb
+    volumes:
+      - /path/to/database:/path/on/docker:rw
+    networks:
+      - backend
+
+networks:
+  backend:
+  frontend:
